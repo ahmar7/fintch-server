@@ -12,9 +12,7 @@ app.use(cookieParser());
 //
 
 let ALLOWED_ORIGINS = [
-  "https://blockchain-frontend-one.vercel.app",
-  "https://www.blockchainex.pro",
-  "https://blockchainex.pro",
+  "https://fintch.io",
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:3002",
