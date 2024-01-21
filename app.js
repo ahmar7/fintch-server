@@ -13,6 +13,7 @@ app.use(cookieParser());
 
 let ALLOWED_ORIGINS = [
   "https://fintch.io",
+  "https://www.fintch.io",
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:3002",
