@@ -11,6 +11,7 @@ let cookieParser = require("cookie-parser");
 app.use(cookieParser());
 //
 
+const cron = require("node-cron");
 let ALLOWED_ORIGINS = [
   "https://fintch.io",
   "https://www.fintch.io",
@@ -36,6 +37,10 @@ app.use((req, res, next) => {
     "POST, GET, PUT, PATCH,DELETE, OPTIONS"
   );
   next();
+});
+cron.schedule("*/15 * * * *", () => {
+  // Your code to be executed every 15 minutes
+  console.log("Cron job executed every 15 minutes");
 });
 //
 // app.use(
