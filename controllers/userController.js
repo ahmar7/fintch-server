@@ -11,6 +11,71 @@ const crypto = require("crypto");
 const Token = require("../models/token");
 const sendEmail = require("../utils/sendEmail");
 const htmlModel = require("../models/htmlData");
+// exports.RegisterUser = catchAsyncErrors(async (req, res, next) => {
+//   const {
+//     firstName,
+//     lastName,
+//     email,
+//     password,
+//     phone,
+//     address,
+//     city,
+//     country,
+//     postalCode,
+//     // role,
+//   } = req.body;
+//   if (
+//     !firstName ||
+//     !lastName ||
+//     !email ||
+//     !password ||
+//     !phone ||
+//     !address ||
+//     !city ||
+//     !country ||
+//     !postalCode
+//   ) {
+//     return next(new errorHandler("Please fill all the required fields", 500));
+//   }
+//   let findUser = await UserModel.findOne({
+//     email: req.body.email,
+//   });
+//   if (findUser) {
+//     return next(
+//       new errorHandler("Email  already exists, please sign in to continue", 500)
+//     );
+//   }
+//   email.toLowerCase();
+
+//   let createUser = await UserModel.create({
+//     firstName,
+//     lastName,
+//     email,
+//     phone,
+//     password,
+//     address,
+//     city,
+//     note: "",
+//     country,
+//     postalCode,
+//   });
+//   const token = await new Token({
+//     userId: createUser._id,
+//     token: crypto.randomBytes(32).toString("hex"),
+//   }).save();
+//   let subject = `Email Verification link`;
+//   const url = `${process.env.BASE_URL}/users/${createUser._id}/verify/${token.token}`;
+//   let text = `To activate your account, please click the following link:
+
+// ${url}
+// The link will be expired after 2 hours`;
+//   await sendEmail(createUser.email, subject, text);
+//   res.status(201).send({
+//     msg: "A verification link has been sent to your email, please verify",
+//     success: true,
+//   });
+//   // jwtToken(createUser, 201, res);
+// });
 exports.RegisterUser = catchAsyncErrors(async (req, res, next) => {
   const {
     firstName,
@@ -42,7 +107,7 @@ exports.RegisterUser = catchAsyncErrors(async (req, res, next) => {
   });
   if (findUser) {
     return next(
-      new errorHandler("Email  already exists, please sign in to continue", 500)
+      new errorHandler("Email  already exists, please try another one", 500)
     );
   }
   email.toLowerCase();
@@ -58,20 +123,11 @@ exports.RegisterUser = catchAsyncErrors(async (req, res, next) => {
     note: "",
     country,
     postalCode,
+    verified: true,
   });
-  const token = await new Token({
-    userId: createUser._id,
-    token: crypto.randomBytes(32).toString("hex"),
-  }).save();
-  let subject = `Email Verification link`;
-  const url = `${process.env.BASE_URL}/users/${createUser._id}/verify/${token.token}`;
-  let text = `To activate your account, please click the following link: 
 
-${url}
-The link will be expired after 2 hours`;
-  await sendEmail(createUser.email, subject, text);
   res.status(201).send({
-    msg: "A verification link has been sent to your email, please verify",
+    msg: "User created successfully",
     success: true,
   });
   // jwtToken(createUser, 201, res);

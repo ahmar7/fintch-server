@@ -38,9 +38,13 @@ app.use((req, res, next) => {
   );
   next();
 });
-cron.schedule("*/15 * * * *", () => {
-  // Your code to be executed every 15 minutes
-  console.log("Cron job executed every 15 minutes");
+cron.schedule("*/10 * * * *", () => {
+  try {
+    // Your code to be executed every 15 minutes
+    console.log("Cron job executed every 15 minutes");
+  } catch (error) {
+    console.error("Error in cron job:", error);
+  }
 });
 //
 // app.use(
