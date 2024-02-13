@@ -11,9 +11,9 @@ const singleUpload = require("../middlewares/multer");
 let router = express.Router();
 
 router
-  .route("/uploadFiles")
+  .route("/uploadFiles/:id")
   .post(singleUpload, isAuthorizedUser, authorizedRoles("admin"), uploadFiles);
-router.route("/getAllData").get(isAuthorizedUser, getAllData);
+router.route("/getAllData/:id").get(isAuthorizedUser, getAllData);
 router
   .route("/deleteSingleFile/:_id")
   .get(isAuthorizedUser, authorizedRoles("admin"), deleteSingleFile);

@@ -8,7 +8,12 @@ const FilesModel = require("../models/filesModel"); // Update the path according
 
 exports.uploadFiles = catchAsyncErrors(async (req, res, next) => {
   const files = req.files;
+  const userId = req.params.id; // Assuming the user ID is passed as a parameter
+  console.log("userId: ", userId);
+
   console.log("req.files: ", files);
+
+  // Check if the user exists
 
   // Map each file to create a new document for each
   const uploadPromises = files.map(async (file) => {
@@ -21,13 +26,25 @@ exports.uploadFiles = catchAsyncErrors(async (req, res, next) => {
       resource_type: fileType === "image" ? "image" : "raw", // Specify the resource type (image or raw) based on file type
     });
 
-    const newDocument = await FilesModel.create({
-      type: file.mimetype,
-      name: name,
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
-      size: file.size,
-    });
+    const newDocument = await FilesModel.findOneAndUpdate(
+      { user: userId },
+      {
+        $push: {
+          files: {
+            type: file.mimetype,
+            name: name,
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+            size: file.size,
+          },
+        },
+      },
+      {
+        new: true,
+        upsert: true,
+      }
+    );
+    console.log("newDocument: ", newDocument);
 
     return newDocument;
   });
@@ -42,8 +59,8 @@ exports.uploadFiles = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllData = catchAsyncErrors(async (req, res, next) => {
-  const allFiles = await FilesModel.find();
-
+  let { id } = req.params;
+  const allFiles = await FilesModel.findOne({ user: id });
   // A simple function, follow function path to read description
 
   res.status(200).send({
@@ -57,9 +74,11 @@ exports.deleteSingleFile = catchAsyncErrors(async (req, res, next) => {
   console.log("fileIdToDelete: ", fileIdToDelete);
 
   // Delete the document based on the inner array's ID
-  const result = await FilesModel.findByIdAndDelete({
-    _id: fileIdToDelete,
-  });
+  const result = await FilesModel.findOneAndUpdate(
+    { "files._id": fileIdToDelete },
+    { $pull: { files: { _id: fileIdToDelete } } },
+    { new: true }
+  );
 
   if (!result) {
     return next(
