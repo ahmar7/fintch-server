@@ -1,6 +1,6 @@
 let express = require("express");
 
-const { isAuthorizedUser, authorizedRoles } = require("../middlewares/auth");
+const { authorizedRoles } = require("../middlewares/auth");
 const {
   addCoins,
   getCoins,
@@ -14,42 +14,32 @@ const {
   deleteEachUser,
   createUserTransaction,
   deleteTransaction,
+  createUserTransactionWithdrawSwap,
+  createUserTransactionDepositSwap,
 } = require("../controllers/coinsController");
 
 let router = express.Router();
 
-router
-  .route("/addCoins/:id")
-  .patch(isAuthorizedUser, authorizedRoles("admin"), addCoins);
-router
-  .route("/updateCoinAddress/:id")
-  .patch(isAuthorizedUser, authorizedRoles("admin"), updateCoinAddress);
-router
-  .route("/getCoins/:id")
-  .get(isAuthorizedUser, authorizedRoles("admin"), getCoins);
-router.route("/getUserCoin/:id").get(isAuthorizedUser, getUserCoin);
+router.route("/addCoins/:id").patch(addCoins);
+router.route("/updateCoinAddress/:id").patch(updateCoinAddress);
+router.route("/getCoins/:id").get(getCoins);
+router.route("/getUserCoin/:id").get(getUserCoin);
 
-router.route("/getCoinsUser/:id").get(isAuthorizedUser, getCoinsUser);
+router.route("/getCoinsUser/:id").get(getCoinsUser);
 router
   .route("/deleteTransaction/:userId/:transactionId")
-  .get(isAuthorizedUser, authorizedRoles("admin"), deleteTransaction);
+  .get(deleteTransaction);
+router.route("/createTransaction/:id").patch(createTransaction);
+router.route("/createUserTransaction/:id").patch(createUserTransaction);
 router
-  .route("/createTransaction/:id")
-  .patch(isAuthorizedUser, authorizedRoles("admin"), createTransaction);
+  .route("/createUserTransactionWithdrawSwap/:id")
+  .patch(createUserTransactionWithdrawSwap);
 router
-  .route("/createUserTransaction/:id")
-  .patch(isAuthorizedUser, createUserTransaction);
-router
-  .route("/updateTransaction/:id")
-  .patch(isAuthorizedUser, authorizedRoles("admin"), updateTransaction);
-router
-  .route("/getTransactions")
-  .get(isAuthorizedUser, authorizedRoles("admin"), getTransactions);
-router
-  .route("/getEachUser/:id")
-  .get(isAuthorizedUser, authorizedRoles("admin"), getEachUser);
-router
-  .route("/deleteEachUser/:id")
-  .delete(isAuthorizedUser, authorizedRoles("admin"), deleteEachUser);
+  .route("/createUserTransactionDepositSwap/:id")
+  .patch(createUserTransactionDepositSwap);
+router.route("/updateTransaction/:id").patch(updateTransaction);
+router.route("/getTransactions").get(getTransactions);
+router.route("/getEachUser/:id").get(getEachUser);
+router.route("/deleteEachUser/:id").delete(deleteEachUser);
 
 module.exports = router;

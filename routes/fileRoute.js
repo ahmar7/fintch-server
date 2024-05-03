@@ -1,6 +1,6 @@
 let express = require("express");
 
-const { isAuthorizedUser, authorizedRoles } = require("../middlewares/auth");
+const { authorizedRoles } = require("../middlewares/auth");
 const {
   uploadFiles,
   getAllData,
@@ -10,12 +10,8 @@ const singleUpload = require("../middlewares/multer");
 
 let router = express.Router();
 
-router
-  .route("/uploadFiles/:id")
-  .post(singleUpload, isAuthorizedUser, authorizedRoles("admin"), uploadFiles);
-router.route("/getAllData/:id").get(isAuthorizedUser, getAllData);
-router
-  .route("/deleteSingleFile/:_id")
-  .get(isAuthorizedUser, authorizedRoles("admin"), deleteSingleFile);
+router.route("/uploadFiles/:id").post(singleUpload, uploadFiles);
+router.route("/getAllData/:id").get(getAllData);
+router.route("/deleteSingleFile/:_id").get(deleteSingleFile);
 
 module.exports = router;

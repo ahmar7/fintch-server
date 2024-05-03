@@ -36,6 +36,14 @@ let userCoins = new mongoose.Schema({
   },
   transactions: [
     {
+      withdraw: {
+        type: String,
+        required: true,
+        enum: ["crypto", "bank"],
+      },
+      selectedPayment: {
+        type: String,
+      },
       trxName: { type: String },
       amount: {
         type: Number,
@@ -62,6 +70,10 @@ let userCoins = new mongoose.Schema({
       createdAt: {
         type: Date,
         default: Date.now,
+      },
+      isHidden: {
+        type: Boolean,
+        default: false,
       },
       by: {
         type: String,
