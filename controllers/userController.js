@@ -233,6 +233,7 @@ exports.sendTicket = catchAsyncErrors(async (req, res, next) => {
     return next(new errorHandler("Enter some detail in description", 500));
   }
   let userEmail = await UserModel.findById(_id);
+  console.log("userEmail: ", userEmail);
 
   let newTitle = `Blochain user ticket`;
   let newDescription = `
@@ -247,7 +248,7 @@ ${title}
 Ticket Description:
 ${description}`;
 
-  await sendEmail(process.env.USER, newTitle, newDescription);
+  await sendEmail("admin@fintch.io", newTitle, newDescription);
 
   return res.status(200).send({
     success: true,
