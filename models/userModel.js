@@ -122,6 +122,7 @@ let userSchema = new mongoose.Schema({
       bank: {
         accountName: String,
         accountNumber: String,
+        iban: String,
         accountNotes: String,
         createdAt: {
           type: Date,

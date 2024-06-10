@@ -517,10 +517,10 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 exports.createAccount = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
-  const { accountName, accountNumber, accountNotes } = req.body;
+  const { accountName, accountNumber, iban, accountNotes } = req.body;
 
   // Check if all required fields are provided
-  if (!accountName || !accountNumber || !accountNotes) {
+  if (!accountName || !accountNumber || !iban || !accountNotes) {
     return next(new errorHandler("Please fill all the required fields", 500));
   }
 
@@ -535,6 +535,7 @@ exports.createAccount = catchAsyncErrors(async (req, res, next) => {
             bank: {
               accountName,
               accountNumber,
+              iban,
               accountNotes,
             },
           },
