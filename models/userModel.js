@@ -84,7 +84,10 @@ let userSchema = new mongoose.Schema({
       },
     },
   ],
-
+  isShared: {
+    type: Boolean,
+    default: false,
+  },
   role: {
     type: String,
     default: "user",

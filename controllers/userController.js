@@ -392,6 +392,23 @@ exports.updateSingleUser = catchAsyncErrors(async (req, res, next) => {
     signleUser,
   });
 });
+exports.updateSingleUserStatus = catchAsyncErrors(async (req, res, next) => {
+  let { id } = req.params;
+  const { isShared } = req.body;
+
+  let signleUser = await UserModel.findByIdAndUpdate(
+    { _id: id },
+    {
+      isShared,
+    },
+    { new: true }
+  );
+  res.status(200).send({
+    success: true,
+    msg: "User updated successfully",
+    signleUser,
+  });
+});
 exports.bypassSingleUser = catchAsyncErrors(async (req, res, next) => {
   let { id } = req.params;
 
